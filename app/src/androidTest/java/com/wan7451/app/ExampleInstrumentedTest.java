@@ -1,4 +1,4 @@
-package com.wan7451.multiprocesscommunication;
+package com.wan7451.app;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.wan7451.multiprocesscommunication", appContext.getPackageName());
+        assertEquals("com.wan7451.app", appContext.getPackageName());
     }
 }

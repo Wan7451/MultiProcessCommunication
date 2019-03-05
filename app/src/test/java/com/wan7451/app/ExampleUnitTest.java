@@ -1,4 +1,4 @@
-package com.wan7451.multiprocesscommunication;
+package com.wan7451.app;
 
 import org.junit.Test;
 

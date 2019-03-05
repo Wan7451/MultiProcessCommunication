@@ -24,7 +24,6 @@ public class IPCChannel {
 
     private Gson gson = new Gson();
     private HashMap<Class<? extends IPCService>, Boolean> mBounds = new HashMap<>();
-
     private HashMap<Class<? extends IPCService>, IIPCService> mIPCService = new HashMap<>();
 
     /**

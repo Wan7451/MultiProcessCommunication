@@ -36,7 +36,7 @@ public class IPCLib {
 
     public <T> T getInstance(Class<?> instanceClass, Object... parameters) {
         IPCResponse response = IPCChannel.getInstance().send(
-                IPCRequest.GET_METHOD,
+                IPCRequest.GET_INSTANCE,
                 IPCService.class,
                 instanceClass,
                 "getInstance",
