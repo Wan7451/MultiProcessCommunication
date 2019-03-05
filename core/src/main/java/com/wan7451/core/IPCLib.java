@@ -27,11 +27,20 @@ public class IPCLib {
         IPCCacheCenter.getInstance().register(clazz);
     }
 
+    public void unregister(Class<?> clazz) {
+        IPCCacheCenter.getInstance().unregister(clazz);
+    }
+
+
     /**
      * 客户端连接
      */
     public void connect(Context context, String packageName) {
         IPCChannel.getInstance().bind(context, packageName, IPCService.class);
+    }
+
+    public void disConnect(Context context) {
+        IPCChannel.getInstance().unbind(context, IPCService.class);
     }
 
     public <T> T getInstance(Class<?> instanceClass, Object... parameters) {
@@ -42,9 +51,9 @@ public class IPCLib {
                 "getInstance",
                 parameters
         );
-        if(response.isSuccess()){
-            return (T)Proxy.newProxyInstance(instanceClass.getClassLoader(),
-                    new Class[]{instanceClass}, new IPCInvocationHandler(instanceClass,IPCService.class));
+        if (response.isSuccess()) {
+            return (T) Proxy.newProxyInstance(instanceClass.getClassLoader(),
+                    new Class[]{instanceClass}, new IPCInvocationHandler(instanceClass, IPCService.class));
         }
         return null;
     }

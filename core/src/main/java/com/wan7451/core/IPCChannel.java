@@ -25,6 +25,7 @@ public class IPCChannel {
     private Gson gson = new Gson();
     private HashMap<Class<? extends IPCService>, Boolean> mBounds = new HashMap<>();
     private HashMap<Class<? extends IPCService>, IIPCService> mIPCService = new HashMap<>();
+    private HashMap<Class<? extends IPCService>, IPCServiceConnection> mConnections = new HashMap<>();
 
     /**
      * @param context
@@ -44,7 +45,13 @@ public class IPCChannel {
             intent.setComponent(new ComponentName(packageName, service.getName()));
         }
         IPCServiceConnection conn = new IPCServiceConnection(service);
+        mConnections.put(service, conn);
         context.bindService(intent, conn, Context.BIND_AUTO_CREATE);
+    }
+
+    public void unbind(Context context, Class<? extends IPCService> service) {
+        IPCServiceConnection conn = mConnections.get(service);
+        context.unbindService(conn);
     }
 
 
@@ -53,15 +60,7 @@ public class IPCChannel {
         if (isBound == null || !isBound) {
             return new IPCResponse("", "服务未连接", false);
         }
-
-        ClassId classId = instanceClass.getAnnotation(ClassId.class);
-        String className;
-        if (classId != null) {
-            className = classId.value();
-        } else {
-            className = instanceClass.getName();
-        }
-
+        String className = AnnotationUtils.getClassName(instanceClass);
         IPCRequest request = new IPCRequest(type, className, methodName, getParameters(parameters));
         IIPCService iipcService = mIPCService.get(service);
         try {

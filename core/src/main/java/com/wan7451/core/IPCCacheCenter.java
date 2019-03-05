@@ -23,21 +23,24 @@ public class IPCCacheCenter {
     private HashMap<String, Object> mInstances = new HashMap<>();
 
     public void register(Class<?> clazz) {
-        ClassId classId = clazz.getAnnotation(ClassId.class);
-        String className;
-        if (classId != null) {
-            className = classId.value();
-        } else {
-            className = clazz.getName();
-        }
+        String className = AnnotationUtils.getClassName(clazz);
         mClasses.put(className, clazz);
-
         HashMap<String, Method> methods = new HashMap<>();
         for (Method method : clazz.getMethods()) {
             methods.put(method.getName(), method);
         }
         mMethods.put(clazz, methods);
     }
+
+    public void unregister(Class<?> clazz) {
+        String className = AnnotationUtils.getClassName(clazz);
+        Class<?> cls = mClasses.get(className);
+        if (cls != null) {
+            mClasses.remove(className);
+            mMethods.remove(cls);
+        }
+    }
+
 
     public Class<?> getClassType(String className) {
         if (TextUtils.isEmpty(className)) {
@@ -69,4 +72,6 @@ public class IPCCacheCenter {
     public Object getObject(String classType) {
         return mInstances.get(classType);
     }
+
+
 }
